@@ -9,9 +9,9 @@ public partial class TblUser
 
     public string? UserName { get; set; }
 
-    public virtual ICollection<TblLecture> TblLectures { get; set; } = new List<TblLecture>();
+    public string? Password { get; set; }
 
-    public virtual ICollection<TblStaff> TblStaffs { get; set; } = new List<TblStaff>();
+    public virtual TblStaff? TblStaff { get; set; }
 
-    public virtual ICollection<TblStudent> TblStudents { get; set; } = new List<TblStudent>();
+    public virtual TblStudent? TblStudent { get; set; }
 }
