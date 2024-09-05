@@ -21,7 +21,7 @@ namespace AttendanceAPI.Controllers
         {
             Attendance attendance = new Attendance(request);
 
-            var lecture = context.TblLectures.Where(x => x.UserID == attendance.UserID && x.LectureDate == attendance.Date).FirstOrDefault();
+            var lecture = context.TblStudentLectures.Where(x => x.UserId == attendance.UserID && x.LectureDate == attendance.Date).FirstOrDefault();
 
             if (lecture != null)//Check if lecture is already in DB
             {
@@ -32,10 +32,10 @@ namespace AttendanceAPI.Controllers
             {
                 if (!attendance.classroomCode.IsNullOrEmpty() && !attendance.UserID.IsNullOrEmpty() && !attendance.moduleCode.IsNullOrEmpty())
                 {
-                    context.TblLectures.Add(new TblLecture()
+                    context.TblStudentLectures.Add(new TblStudentLecture()
                     {
-                        LectureId = "L" + context.TblLectures.Count(),
-                        UserID = attendance.UserID,
+                        LectureId = "L" + context.TblStudentLectures.Count(),
+                        UserId = attendance.UserID,
                         ClassroomCode = attendance.classroomCode,
                         LectureDate = (DateOnly)attendance.Date!,
                         ScanIn = (TimeOnly)attendance.Time!,
@@ -70,20 +70,20 @@ namespace AttendanceAPI.Controllers
         }
 
         [HttpPost("Add")]
-        public string AddStudent(string UserId, string StudentNo)
+        public string AddStudent([FromBody] NewUser user)
         {
             try
             {
                 TblUser newUser = new TblUser
                 {
-                    UserId = UserId,
+                    UserId = user.UserId,
                     UserName = "New User"
                 };
 
                 TblStudent newStudent = new TblStudent
                 {
                     UserId = newUser.UserId,
-                    StudentNo = StudentNo
+                    StudentNo = user.StudentNo,
                 };
 
                 context.TblUsers.Add(newUser);
@@ -97,6 +97,12 @@ namespace AttendanceAPI.Controllers
                 return e.ToString();
             }
         }
+    }
+
+    public struct NewUser
+    {
+        public string UserId { get; set; }
+        public string StudentNo { get; set; }
     }
 }
 
