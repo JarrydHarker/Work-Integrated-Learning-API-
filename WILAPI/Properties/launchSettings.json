@@ -16,7 +16,7 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "PROD_CONN_STRING": "Server=tcp:wil-server.database.windows.net,1433; Initial Catalog=WIL_DB2;Persist Security Info=False;User ID=wilserveradmin;Password=Flowcold84;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
+        "PROD_CONN_STRING": "Server=tcp:wilapidbserver.database.windows.net,1433;Initial Catalog=dbAttendance;Persist Security Info=False;User ID=ST10085210;Password=Treepair521;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
         "DEV_CONN_STRING": "Server=localhost;Database=dbWIL;Trusted_Connection=True;TrustServerCertificate=true;"
       },
       "dotnetRunMessages": true,
