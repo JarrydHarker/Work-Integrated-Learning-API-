@@ -77,7 +77,8 @@ namespace AttendanceAPI.Controllers
                 TblUser newUser = new TblUser
                 {
                     UserId = user.UserId,
-                    UserName = "New User"
+                    UserName = "New User",
+                    Password = "0000"
                 };
 
                 TblStudent newStudent = new TblStudent
