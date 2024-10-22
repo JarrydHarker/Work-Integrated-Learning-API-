@@ -99,13 +99,13 @@ namespace AttendanceAPI.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("Lecture")]
         public List<TblStaffLecture> GetLectures(string UserId)
         {
             return context.TblStaffLectures.Where(x => x.UserId == UserId).ToList();
         }
 
-        [HttpPost]
+        [HttpPost("Lecture")]
         public string StartLecture(TblStaffLecture lecture)
         {
             try
