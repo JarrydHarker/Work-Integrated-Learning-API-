@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections;
 using System.Text;
+using WILAPI;
 using WILAPI.Models;
 
 
@@ -74,11 +75,13 @@ namespace AttendanceAPI.Controllers
         {
             try
             {
+                Hasher hasher = new Hasher("0000");
+
                 TblUser newUser = new TblUser
                 {
                     UserId = user.UserId,
                     UserName = "New User",
-                    Password = "0000"
+                    Password = hasher.GetHash(),
                 };
 
                 TblStudent newStudent = new TblStudent
