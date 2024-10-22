@@ -52,7 +52,7 @@ namespace AttendanceAPI.Controllers
         }
 
         [HttpGet]
-        public List<string> getModules()//Get method to populate module options in scanner
+        public List<string> GetModules()//Get method to populate module options in scanner
         {
             List<string> Output = new List<string>();
 
@@ -93,6 +93,28 @@ namespace AttendanceAPI.Controllers
                 context.SaveChanges();
 
                 return "Success";
+            } catch (Exception e)
+            {
+                return e.ToString();
+            }
+        }
+
+        [HttpGet]
+        public List<TblStaffLecture> GetLectures(string UserId)
+        {
+            return context.TblStaffLectures.Where(x => x.UserId == UserId).ToList();
+        }
+
+        [HttpPost]
+        public string StartLecture(TblStaffLecture lecture)
+        {
+            try
+            {
+                context.TblStaffLectures.Update(lecture);
+                context.SaveChanges();
+
+                return "Success";
+
             } catch (Exception e)
             {
                 return e.ToString();
