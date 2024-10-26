@@ -76,12 +76,12 @@ namespace AttendanceAPI.Controllers
             try
             {
                 Hasher hasher = new Hasher("0000");
-
+                string pw = hasher.GetHash();
                 TblUser newUser = new TblUser
                 {
                     UserId = user.UserId,
                     UserName = "New User",
-                    Password = hasher.GetHash(),
+                    Password = pw,
                 };
 
                 TblStudent newStudent = new TblStudent
@@ -109,14 +109,31 @@ namespace AttendanceAPI.Controllers
         }
 
         [HttpPost("Lecture")]
-        public string StartLecture(TblStaffLecture lecture)
+        public string UpdateLecture(LectureTime lecture)
         {
             try
             {
-                context.TblStaffLectures.Update(lecture);
-                context.SaveChanges();
+                var dbLecture = context.TblStaffLectures.Where(x => x.LectureId == lecture.LectureId).FirstOrDefault();
+                
+                if (dbLecture != null)
+                {
+                    if (dbLecture.Start != null)
+                    {
+                        dbLecture.Finish = lecture.Time;
+                    }else
+                    {
+                        dbLecture.Start = lecture.Time;
+                    }
 
-                return "Success";
+                    context.TblStaffLectures.Update(dbLecture);
+                    context.SaveChanges();
+
+                    return "Success";
+                }else
+                {
+                    return "Lecture not found";
+                }
+                
 
             } catch (Exception e)
             {
@@ -129,6 +146,12 @@ namespace AttendanceAPI.Controllers
     {
         public string UserId { get; set; }
         public string StudentNo { get; set; }
+    }
+
+    public struct LectureTime
+    {
+        public string LectureId { get; set; }
+        public TimeOnly Time {  get; set; }
     }
 }
 
