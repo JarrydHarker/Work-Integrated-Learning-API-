@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections;
 using System.Text;
+using System.Text.Json.Serialization;
 using WILAPI;
 using WILAPI.Models;
 
@@ -109,20 +110,21 @@ namespace AttendanceAPI.Controllers
         }
 
         [HttpPost("Lecture")]
-        public string UpdateLecture(LectureTime lecture)
+        public string UpdateLecture(string lectureId, string classroomCode)
         {
             try
             {
-                var dbLecture = context.TblStaffLectures.Where(x => x.LectureId == lecture.LectureId).FirstOrDefault();
+                var dbLecture = context.TblStaffLectures.Where(x => x.LectureId == lectureId).FirstOrDefault();
                 
                 if (dbLecture != null)
                 {
                     if (dbLecture.Start != null)
                     {
-                        dbLecture.Finish = lecture.Time;
+                        dbLecture.ClassroomCode = classroomCode;
+                        dbLecture.Finish = TimeOnly.FromDateTime(DateTime.Now);
                     }else
                     {
-                        dbLecture.Start = lecture.Time;
+                        dbLecture.Start = TimeOnly.FromDateTime(DateTime.Now);
                     }
 
                     context.TblStaffLectures.Update(dbLecture);
@@ -146,12 +148,6 @@ namespace AttendanceAPI.Controllers
     {
         public string UserId { get; set; }
         public string StudentNo { get; set; }
-    }
-
-    public struct LectureTime
-    {
-        public string LectureId { get; set; }
-        public TimeOnly Time {  get; set; }
     }
 }
 
