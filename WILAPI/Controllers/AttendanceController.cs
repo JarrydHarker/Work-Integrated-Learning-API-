@@ -103,6 +103,38 @@ namespace AttendanceAPI.Controllers
             }
         }
 
+        [HttpPost("Staff/Add")]
+        public string AddStaff([FromBody] NewStaff staff)
+        {
+            try
+            {
+                Hasher hasher = new Hasher("0000");
+                string pw = hasher.GetHash();
+                TblUser newUser = new TblUser
+                {
+                    UserId = staff.UserId,
+                    UserName = "New User",
+                    Password = pw,
+                };
+
+                TblStaff newStudent = new TblStaff
+                {
+                    UserId = newUser.UserId,
+                    StaffId = staff.StaffNo,
+                };
+
+                context.TblUsers.Add(newUser);
+                context.TblStaffs.Add(newStudent);
+                newUser.TblStaff = newStudent;
+                context.SaveChanges();
+
+                return "Success";
+            } catch (Exception e)
+            {
+                return e.ToString();
+            }
+        }
+
         [HttpGet("Lecture")]
         public List<TblStaffLecture> GetLectures(string UserId)
         {
@@ -135,8 +167,6 @@ namespace AttendanceAPI.Controllers
                 {
                     return "Lecture not found";
                 }
-                
-
             } catch (Exception e)
             {
                 return e.ToString();
@@ -148,6 +178,12 @@ namespace AttendanceAPI.Controllers
     {
         public string UserId { get; set; }
         public string StudentNo { get; set; }
+    }
+
+    public struct NewStaff
+    {
+        public string UserId { get; set; }
+        public string StaffNo { get; set; }
     }
 }
 
