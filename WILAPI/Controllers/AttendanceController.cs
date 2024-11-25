@@ -138,7 +138,7 @@ namespace AttendanceAPI.Controllers
         [HttpGet("Lecture")]
         public List<TblStaffLecture> GetLectures(string UserId)
         {
-            return context.TblStaffLectures.Where(x => x.UserId == UserId).ToList();
+            return context.TblStaffLectures.Where(x => x.UserId == UserId && x.Finish == null).ToList();
         }
 
         [HttpPost("Lecture")]
