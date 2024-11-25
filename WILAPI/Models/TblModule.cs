@@ -10,4 +10,8 @@ public partial class TblModule
     public string? ModuleName { get; set; }
 
     public virtual ICollection<TblStaffLecture> TblStaffLectures { get; set; } = new List<TblStaffLecture>();
+
+    public virtual ICollection<TblStudentLecture> TblStudentLectures { get; set; } = new List<TblStudentLecture>();
+
+    public virtual ICollection<TblUser> Users { get; set; } = new List<TblUser>();
 }

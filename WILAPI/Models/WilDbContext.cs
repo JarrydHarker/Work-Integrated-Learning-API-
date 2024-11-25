@@ -29,8 +29,6 @@ public partial class WilDbContext : DbContext
 
     public virtual DbSet<TblUser> TblUsers { get; set; }
 
-    public virtual DbSet<TblUserModule> TblUserModules { get; set; }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=tcp:wilapidbserver.database.windows.net,1433;Database=WIL-DB;User ID=ST10085210;Password=Treepair521;Encrypt=True;");
@@ -49,6 +47,30 @@ public partial class WilDbContext : DbContext
             entity.Property(e => e.ModuleName)
                 .HasMaxLength(50)
                 .IsFixedLength();
+
+            entity.HasMany(d => d.Users).WithMany(p => p.ModuleCodes)
+                .UsingEntity<Dictionary<string, object>>(
+                    "TblUserModule",
+                    r => r.HasOne<TblUser>().WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("FK_tblUserModules_tblUser"),
+                    l => l.HasOne<TblModule>().WithMany()
+                        .HasForeignKey("ModuleCode")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("FK_tblUserModules_tblModule"),
+                    j =>
+                    {
+                        j.HasKey("ModuleCode", "UserId");
+                        j.ToTable("tblUserModules");
+                        j.IndexerProperty<string>("ModuleCode")
+                            .HasMaxLength(8)
+                            .IsFixedLength();
+                        j.IndexerProperty<string>("UserId")
+                            .HasMaxLength(8)
+                            .IsFixedLength()
+                            .HasColumnName("UserID");
+                    });
         });
 
         modelBuilder.Entity<TblRole>(entity =>
@@ -145,33 +167,33 @@ public partial class WilDbContext : DbContext
 
         modelBuilder.Entity<TblStudentLecture>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("tblStudentLecture");
+            entity.HasKey(e => new { e.LectureId, e.UserId, e.ModuleCode });
 
-            entity.Property(e => e.ClassroomCode).HasMaxLength(5);
+            entity.ToTable("tblStudentLecture");
+
             entity.Property(e => e.LectureId)
                 .HasMaxLength(10)
                 .HasColumnName("LectureID");
-            entity.Property(e => e.ModuleCode)
-                .HasMaxLength(8)
-                .IsFixedLength();
             entity.Property(e => e.UserId)
                 .HasMaxLength(8)
                 .IsFixedLength()
                 .HasColumnName("UserID");
+            entity.Property(e => e.ModuleCode)
+                .HasMaxLength(8)
+                .IsFixedLength();
+            entity.Property(e => e.ClassroomCode).HasMaxLength(5);
 
-            entity.HasOne(d => d.Lecture).WithMany()
+            entity.HasOne(d => d.Lecture).WithMany(p => p.TblStudentLectures)
                 .HasForeignKey(d => d.LectureId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_tblStudentLecture_TblStaffLecture1");
 
-            entity.HasOne(d => d.ModuleCodeNavigation).WithMany()
+            entity.HasOne(d => d.ModuleCodeNavigation).WithMany(p => p.TblStudentLectures)
                 .HasForeignKey(d => d.ModuleCode)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__tblLectur__Modul__7A672E12");
 
-            entity.HasOne(d => d.User).WithMany()
+            entity.HasOne(d => d.User).WithMany(p => p.TblStudentLectures)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_tblStudentLecture_tblStudent");
@@ -191,34 +213,6 @@ public partial class WilDbContext : DbContext
             entity.Property(e => e.UserName)
                 .HasMaxLength(20)
                 .IsFixedLength();
-        });
-
-        modelBuilder.Entity<TblUserModule>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToTable("tblUserModules");
-
-            entity.Property(e => e.ModuleCode)
-                .HasMaxLength(8)
-                .IsFixedLength();
-            entity.Property(e => e.UserId)
-                .HasMaxLength(8)
-                .IsFixedLength()
-                .HasColumnName("UserID");
-            entity.Property(e => e.UserModuleId)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("UserModuleID");
-
-            entity.HasOne(d => d.ModuleCodeNavigation).WithMany()
-                .HasForeignKey(d => d.ModuleCode)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_tblUserModules_tblModule");
-
-            entity.HasOne(d => d.User).WithMany()
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_tblUserModules_tblUser");
         });
 
         OnModelCreatingPartial(modelBuilder);

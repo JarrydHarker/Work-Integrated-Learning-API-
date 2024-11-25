@@ -21,5 +21,7 @@ public partial class TblStaffLecture
 
     public virtual TblModule ModuleCodeNavigation { get; set; } = null!;
 
+    public virtual ICollection<TblStudentLecture> TblStudentLectures { get; set; } = new List<TblStudentLecture>();
+
     public virtual TblStaff User { get; set; } = null!;
 }
