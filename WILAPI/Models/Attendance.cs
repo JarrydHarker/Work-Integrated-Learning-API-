@@ -23,14 +23,7 @@ namespace WILAPI.Models
             Date = DateOnly.FromDateTime(DateTime.Now);
         }
 
-        public static Attendance FromLecture(TblLecture lecture)
-        {
-            Attendance attendance = new Attendance(lecture.LectureId, lecture.UserID, lecture.ClassroomCode, lecture.ModuleCode);
-
-            attendance.Date = lecture.LectureDate;
-
-            return attendance;
-        }
+      
 
         public Attendance(AttendanceRequest attendanceRequest)
         {

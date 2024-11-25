@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace WILAPI.Models;
+namespace XBCADAttendance.Models;
 
-public partial class WilDbContext : DbContext
+public partial class DbWilContext : DbContext
 {
-    public WilDbContext()
+    public DbWilContext()
     {
     }
 
-    public WilDbContext(DbContextOptions<WilDbContext> options)
+    public DbWilContext(DbContextOptions<DbWilContext> options)
         : base(options)
     {
     }
@@ -29,15 +29,19 @@ public partial class WilDbContext : DbContext
 
     public virtual DbSet<TblUser> TblUsers { get; set; }
 
+    public virtual DbSet<TblUserModules> TblUserModules { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=tcp:wilapidbserver.database.windows.net;User ID=ST10085210;Password=Treepair521;Database=WIL-DB;Trusted_Connection=False;");
+        => optionsBuilder.UseSqlServer("Server=tcp:wilapidbserver.database.windows.net,1433;Initial Catalog=WIL-DB;Persist Security Info=False;User ID=ST10085210;Password=Treepair521;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblModule>(entity =>
         {
-            entity.HasKey(e => e.ModuleCode).HasName("PK__tblModul__EB27D4322C4E50B5");
+            entity.HasKey(e => e.ModuleCode).HasName("PK__tblModul__EB27D43206A5E44A");
 
             entity.ToTable("tblModule");
 
@@ -47,42 +51,21 @@ public partial class WilDbContext : DbContext
             entity.Property(e => e.ModuleName)
                 .HasMaxLength(50)
                 .IsFixedLength();
-
-            entity.HasMany(d => d.tblUsers).WithMany(p => p.ModuleCodes)
-                .UsingEntity<Dictionary<string, object>>(
-                    "TblUserModule",
-                    r => r.HasOne<TblUser>().WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__tblUserMo__UserI__19DFD96B"),
-                    l => l.HasOne<TblModule>().WithMany()
-                        .HasForeignKey("ModuleCode")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__tblUserMo__Modul__18EBB532"),
-                    j =>
-                    {
-                        j.HasKey("ModuleCode", "UserId").HasName("PK__tblUserM__3A5F58F8D34BA0AF");
-                        j.ToTable("tblUserModules");
-                        j.IndexerProperty<string>("ModuleCode")
-                            .HasMaxLength(8)
-                            .IsFixedLength();
-                        j.IndexerProperty<string>("UserId")
-                            .HasMaxLength(8)
-                            .IsFixedLength()
-                            .HasColumnName("UserID");
-                    });
         });
 
         modelBuilder.Entity<TblRole>(entity =>
         {
-            entity.HasKey(e => e.RoleId).HasName("PK__tblRole__8AFACE3A60A78ADE");
+            entity.HasKey(e => e.RoleId).HasName("PK__tblRole__8AFACE3A27DAE5EE");
 
             entity.ToTable("tblRole");
 
             entity.Property(e => e.RoleId)
-                .HasMaxLength(5)
+                .HasMaxLength(10)
+                .IsFixedLength()
                 .HasColumnName("RoleID");
-            entity.Property(e => e.RoleName).HasMaxLength(25);
+            entity.Property(e => e.RoleName)
+                .HasMaxLength(50)
+                .IsFixedLength();
         });
 
         modelBuilder.Entity<TblStaff>(entity =>
@@ -96,7 +79,8 @@ public partial class WilDbContext : DbContext
                 .IsFixedLength()
                 .HasColumnName("UserID");
             entity.Property(e => e.RoleId)
-                .HasMaxLength(5)
+                .HasMaxLength(10)
+                .IsFixedLength()
                 .HasColumnName("RoleID");
             entity.Property(e => e.StaffId)
                 .HasMaxLength(10)
@@ -105,13 +89,12 @@ public partial class WilDbContext : DbContext
 
             entity.HasOne(d => d.Role).WithMany(p => p.TblStaffs)
                 .HasForeignKey(d => d.RoleId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__tblStaff__RoleID__693CA210");
+                .HasConstraintName("FK__tblStaff__RoleID__76969D2E");
 
             entity.HasOne(d => d.User).WithOne(p => p.TblStaff)
                 .HasForeignKey<TblStaff>(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__tblStaff__UserID__6A30C649");
+                .HasConstraintName("FK__tblStaff__UserID__75A278F5");
         });
 
         modelBuilder.Entity<TblStaffLecture>(entity =>
@@ -122,6 +105,7 @@ public partial class WilDbContext : DbContext
 
             entity.Property(e => e.LectureId)
                 .HasMaxLength(10)
+                .IsFixedLength()
                 .HasColumnName("LectureID");
             entity.Property(e => e.ClassroomCode).HasMaxLength(5);
             entity.Property(e => e.Finish).HasColumnName("finish");
@@ -162,7 +146,7 @@ public partial class WilDbContext : DbContext
             entity.HasOne(d => d.User).WithOne(p => p.TblStudent)
                 .HasForeignKey<TblStudent>(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__tblStuden__UserI__6D0D32F4");
+                .HasConstraintName("FK__tblStuden__UserI__7D439ABD");
         });
 
         modelBuilder.Entity<TblStudentLecture>(entity =>
@@ -174,6 +158,7 @@ public partial class WilDbContext : DbContext
             entity.Property(e => e.ClassroomCode).HasMaxLength(5);
             entity.Property(e => e.LectureId)
                 .HasMaxLength(10)
+                .IsFixedLength()
                 .HasColumnName("LectureID");
             entity.Property(e => e.ModuleCode)
                 .HasMaxLength(8)
@@ -201,7 +186,7 @@ public partial class WilDbContext : DbContext
 
         modelBuilder.Entity<TblUser>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__tblUser__1788CCAC9CEE190B");
+            entity.HasKey(e => e.UserId).HasName("PK__tblUser__1788CCAC6390EC4C");
 
             entity.ToTable("tblUser");
 
@@ -215,8 +200,42 @@ public partial class WilDbContext : DbContext
                 .IsFixedLength();
         });
 
+        modelBuilder.Entity<TblUserModules>(entity =>
+        {
+            // Composite Primary Key
+            entity.HasKey(e => new { e.ModuleCode, e.UserId })
+                  .HasName("PK_tblUserModules");
+
+            // Table Mapping
+            entity.ToTable("tblUserModules");
+
+            // Properties
+            entity.Property(e => e.ModuleCode)
+                  .HasMaxLength(50)
+                  .IsFixedLength()
+                  .HasColumnName("ModuleCode");
+
+            entity.Property(e => e.UserId)
+                  .HasMaxLength(50) // Ensure this matches the column definition
+                  .HasColumnName("UserID");
+
+            // Relationships
+            entity.HasOne(e => e.TblModule) // Navigation property to TblModule
+                  .WithMany(m => m.TblUserModules) // Reverse navigation property in TblModule
+                  .HasForeignKey(e => e.ModuleCode)
+                  .HasConstraintName("FK_tblUserModules_tblModule");
+
+            entity.HasOne(e => e.TblUser) // Navigation property to TblUser
+                  .WithMany(u => u.TblUserModules) // Reverse navigation property in TblUser
+                  .HasForeignKey(e => e.UserId)
+                  .HasConstraintName("FK_tblUserModules_tblUser");
+        });
+
+
         OnModelCreatingPartial(modelBuilder);
     }
+
+
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

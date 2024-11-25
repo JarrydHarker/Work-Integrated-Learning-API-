@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using WILAPI;
 using WILAPI.Models;
+using XBCADAttendance.Models;
 
 
 namespace AttendanceAPI.Controllers
@@ -16,7 +17,7 @@ namespace AttendanceAPI.Controllers
     [ApiController]
     public class AttendanceController : ControllerBase
     {
-        WilDbContext context = new WilDbContext();
+        DbWilContext context = new DbWilContext();
 
         [HttpPost]
         public string PostAttendance([FromBody] AttendanceRequest request)//Post method to get data from scanner
@@ -186,5 +187,6 @@ namespace AttendanceAPI.Controllers
         public string UserId { get; set; }
         public string StaffNo { get; set; }
     }
+  
 }
 

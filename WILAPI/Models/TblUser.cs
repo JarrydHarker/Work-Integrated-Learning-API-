@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WILAPI.Models;
+namespace XBCADAttendance.Models;
 
 public partial class TblUser
 {
@@ -15,5 +15,5 @@ public partial class TblUser
 
     public virtual TblStudent? TblStudent { get; set; }
 
-    public virtual ICollection<TblModule> ModuleCodes { get; set; } = new List<TblModule>();
+    public virtual ICollection<TblUserModules> TblUserModules { get; set; } = new List<TblUserModules>();
 }

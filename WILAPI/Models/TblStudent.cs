@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WILAPI.Models;
+namespace XBCADAttendance.Models;
 
 public partial class TblStudent
 {
