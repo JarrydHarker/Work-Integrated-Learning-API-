@@ -15,5 +15,5 @@ public partial class TblUser
 
     public virtual TblStudent? TblStudent { get; set; }
 
-    public virtual ICollection<TblModule> ModuleCodes { get; set; } = new List<TblModule>();
+    public virtual ICollection<TblUserModule> TblUserModules { get; set; } = new List<TblUserModule>();
 }
