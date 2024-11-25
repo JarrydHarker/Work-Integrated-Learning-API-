@@ -23,7 +23,7 @@ namespace AttendanceAPI.Controllers
         {
             Attendance attendance = new Attendance(request);
 
-            var lecture = context.TblStudentLectures.Where(x => x.UserId == attendance.UserID && x.LectureDate == attendance.Date).FirstOrDefault();
+            var lecture = context.TblStudentLectures.Where(x => x.LectureId == attendance.lectureID).FirstOrDefault();
 
             if (lecture != null)//Check if lecture is already in DB
             {
