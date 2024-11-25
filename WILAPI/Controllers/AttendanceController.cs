@@ -70,7 +70,7 @@ namespace AttendanceAPI.Controllers
         {
             List<string> Output = new List<string>();
 
-            var modules = context.TblUserModules.Where(x => x != null).Select(x => x.ModuleCode).ToList();
+            var modules = context.TblUserModules.Select(x => x.ModuleCode).ToList();
 
             if (modules != null)//Null check
             {
