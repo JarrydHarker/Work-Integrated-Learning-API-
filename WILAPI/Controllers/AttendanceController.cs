@@ -13,11 +13,11 @@ using WILAPI.Models;
 
 namespace AttendanceAPI.Controllers
 {
-   /* [Route("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AttendanceController : ControllerBase
     {
-        DbWilContext context = new DbWilContext();
+        WilDbContext context = new WilDbContext();
 
         [HttpPost]
         public string PostAttendance([FromBody] AttendanceRequest request)//Post method to get data from scanner
@@ -187,6 +187,6 @@ namespace AttendanceAPI.Controllers
         public string UserId { get; set; }
         public string StaffNo { get; set; }
     }
-  */
+  
 }
 
