@@ -29,7 +29,7 @@ namespace AttendanceAPI.Controllers
 
             if (!modules.Contains(attendance.moduleCode))
             {
-                context.TblUserModules.Add(new TblUserModules
+                context.TblUserModules.Add(new TblUserModule
                 {
                     UserId = attendance.UserID,
                     ModuleCode = attendance.moduleCode,
