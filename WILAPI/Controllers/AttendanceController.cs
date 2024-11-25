@@ -28,7 +28,8 @@ namespace AttendanceAPI.Controllers
             if (lecture != null)//Check if lecture is already in DB
             {
                 lecture.ScanOut = attendance.Time;//Update scan out time
-
+                context.SaveChanges();
+                
                 return "Success";
             } else //If there is no preexisting lecture in DB add a new one
             {
