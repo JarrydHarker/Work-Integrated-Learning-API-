@@ -9,6 +9,8 @@ public partial class TblUserModule
 
     public string UserId { get; set; } = null!;
 
+    public int UserModuleId { get; set; }
+
     public virtual TblModule ModuleCodeNavigation { get; set; } = null!;
 
     public virtual TblUser User { get; set; } = null!;

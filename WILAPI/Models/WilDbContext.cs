@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using WILAPI.Models;
 
 namespace WILAPI.Models;
 
@@ -196,10 +195,11 @@ public partial class WilDbContext : DbContext
 
         modelBuilder.Entity<TblUserModule>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("tblUserModules");
+            entity.HasKey(e => e.UserModuleId);
 
+            entity.ToTable("tblUserModules");
+
+            entity.Property(e => e.UserModuleId).HasColumnName("UserModuleID");
             entity.Property(e => e.ModuleCode)
                 .HasMaxLength(8)
                 .IsFixedLength();
@@ -208,12 +208,12 @@ public partial class WilDbContext : DbContext
                 .IsFixedLength()
                 .HasColumnName("UserID");
 
-            entity.HasOne(d => d.ModuleCodeNavigation).WithMany()
+            entity.HasOne(d => d.ModuleCodeNavigation).WithMany(p => p.TblUserModules)
                 .HasForeignKey(d => d.ModuleCode)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_tblUserModules_tblModule");
 
-            entity.HasOne(d => d.User).WithMany()
+            entity.HasOne(d => d.User).WithMany(p => p.TblUserModules)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_tblUserModules_tblUser");
