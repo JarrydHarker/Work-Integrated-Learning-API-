@@ -3,11 +3,13 @@ using System.Collections.Generic;
 
 namespace WILAPI.Models;
 
-public partial class TblStudent
+public partial class TblUserModule
 {
-    public string StudentNo { get; set; } = null!;
+    public string ModuleCode { get; set; } = null!;
 
     public string UserId { get; set; } = null!;
+
+    public virtual TblModule ModuleCodeNavigation { get; set; } = null!;
 
     public virtual TblUser User { get; set; } = null!;
 }
