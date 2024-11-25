@@ -25,6 +25,16 @@ namespace AttendanceAPI.Controllers
             Attendance attendance = new Attendance(request);
 
             var lecture = context.TblStudentLectures.Where(x => x.LectureId == attendance.lectureID).FirstOrDefault();
+            var modules = context.TblUserModules.Select(x => x.ModuleCode).ToList();
+
+            if (!modules.Contains(attendance.moduleCode))
+            {
+                context.TblUserModules.Add(new TblUserModules
+                {
+                    UserId = attendance.UserID,
+                    ModuleCode = attendance.moduleCode,
+                });
+            }
 
             if (lecture != null)//Check if lecture is already in DB
             {
@@ -119,15 +129,15 @@ namespace AttendanceAPI.Controllers
                     Password = pw,
                 };
 
-                TblStaff newStudent = new TblStaff
+                TblStaff newStaff = new TblStaff
                 {
                     UserId = newUser.UserId,
                     StaffId = staff.StaffNo,
                 };
 
                 context.TblUsers.Add(newUser);
-                context.TblStaffs.Add(newStudent);
-                newUser.TblStaff = newStudent;
+                context.TblStaffs.Add(newStaff);
+                newUser.TblStaff = newStaff;
                 context.SaveChanges();
 
                 return "Success";

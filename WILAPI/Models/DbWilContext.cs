@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using WILAPI.Models;
 
 namespace XBCADAttendance.Models;
 
