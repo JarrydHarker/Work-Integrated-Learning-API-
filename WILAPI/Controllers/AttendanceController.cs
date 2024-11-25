@@ -16,7 +16,7 @@ namespace AttendanceAPI.Controllers
     [ApiController]
     public class AttendanceController : ControllerBase
     {
-        DbWilContext context = new DbWilContext();
+        WilDbContext context = new WilDbContext();
 
         [HttpPost]
         public string PostAttendance([FromBody] AttendanceRequest request)//Post method to get data from scanner

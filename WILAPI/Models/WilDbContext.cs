@@ -48,7 +48,7 @@ public partial class WilDbContext : DbContext
                 .HasMaxLength(50)
                 .IsFixedLength();
 
-            entity.HasMany(d => d.Users).WithMany(p => p.ModuleCodes)
+            entity.HasMany(d => d.tblUsers).WithMany(p => p.ModuleCodes)
                 .UsingEntity<Dictionary<string, object>>(
                     "TblUserModule",
                     r => r.HasOne<TblUser>().WithMany()
