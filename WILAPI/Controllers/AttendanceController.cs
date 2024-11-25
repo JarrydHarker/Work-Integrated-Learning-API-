@@ -36,7 +36,7 @@ namespace AttendanceAPI.Controllers
                 {
                     context.TblStudentLectures.Add(new TblStudentLecture()
                     {
-                        LectureId = "L" + context.TblStudentLectures.Count(),
+                        LectureId = attendance.lectureID,
                         UserId = attendance.UserID,
                         ClassroomCode = attendance.classroomCode,
                         LectureDate = (DateOnly)attendance.Date!,

@@ -5,6 +5,7 @@ namespace WILAPI.Models
 {
     public class Attendance
     {
+        public string lectureID { get; set; }
         public string UserID { get; set; }
         public string classroomCode { get; set; }
         public string moduleCode { get; set; }
@@ -12,8 +13,9 @@ namespace WILAPI.Models
         public TimeOnly? Time { get; set; }
 
         [JsonConstructor]
-        public Attendance(string UserID, string classroomCode, string moduleCode)
+        public Attendance(string lectureID, string UserID, string classroomCode, string moduleCode)
         {
+            this.lectureID = lectureID;
             this.UserID = UserID;
             this.classroomCode = classroomCode;
             this.moduleCode = moduleCode;
@@ -23,7 +25,7 @@ namespace WILAPI.Models
 
         public static Attendance FromLecture(TblLecture lecture)
         {
-            Attendance attendance = new Attendance(lecture.UserID, lecture.ClassroomCode, lecture.ModuleCode);
+            Attendance attendance = new Attendance(lecture.LectureId, lecture.UserID, lecture.ClassroomCode, lecture.ModuleCode);
 
             attendance.Date = lecture.LectureDate;
 
@@ -32,6 +34,7 @@ namespace WILAPI.Models
 
         public Attendance(AttendanceRequest attendanceRequest)
         {
+            lectureID = attendanceRequest.lectureID;
             UserID = attendanceRequest.UserID;
             classroomCode = attendanceRequest.classroomCode;
             moduleCode = attendanceRequest.moduleCode;
@@ -42,12 +45,14 @@ namespace WILAPI.Models
 
     public class AttendanceRequest
     {
+        public string lectureID {  get; set; }
         public string UserID { get; set; }
         public string classroomCode { get; set; }
         public string moduleCode { get; set; }
 
-        public AttendanceRequest(string UserID, string classroomCode, string moduleCode)
+        public AttendanceRequest(string lectureID, string UserID, string classroomCode, string moduleCode)
         {
+            this.lectureID = lectureID;
             this.UserID = UserID;
             this.classroomCode = classroomCode;
             this.moduleCode = moduleCode;
