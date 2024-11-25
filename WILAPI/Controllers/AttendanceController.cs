@@ -8,12 +8,12 @@ using System.Text;
 using System.Text.Json.Serialization;
 using WILAPI;
 using WILAPI.Models;
-using XBCADAttendance.Models;
+//using XBCADAttendance.Models;
 
 
 namespace AttendanceAPI.Controllers
 {
-    [Route("api/[controller]")]
+   /* [Route("api/[controller]")]
     [ApiController]
     public class AttendanceController : ControllerBase
     {
@@ -187,6 +187,6 @@ namespace AttendanceAPI.Controllers
         public string UserId { get; set; }
         public string StaffNo { get; set; }
     }
-  
+  */
 }
 

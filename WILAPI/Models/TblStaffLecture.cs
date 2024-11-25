@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace XBCADAttendance.Models;
+namespace WILAPI.Models;
 
 public partial class TblStaffLecture
 {
