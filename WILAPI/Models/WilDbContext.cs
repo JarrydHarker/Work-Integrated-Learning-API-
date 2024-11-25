@@ -195,11 +195,10 @@ public partial class WilDbContext : DbContext
 
         modelBuilder.Entity<TblUserModule>(entity =>
         {
-            entity.HasKey(e => e.UserModuleId);
+            entity
+                .HasNoKey()
+                .ToTable("tblUserModules");
 
-            entity.ToTable("tblUserModules");
-
-            entity.Property(e => e.UserModuleId).HasColumnName("UserModuleID");
             entity.Property(e => e.ModuleCode)
                 .HasMaxLength(8)
                 .IsFixedLength();
@@ -207,13 +206,16 @@ public partial class WilDbContext : DbContext
                 .HasMaxLength(8)
                 .IsFixedLength()
                 .HasColumnName("UserID");
+            entity.Property(e => e.UserModuleId)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("UserModuleID");
 
-            entity.HasOne(d => d.ModuleCodeNavigation).WithMany(p => p.TblUserModules)
+            entity.HasOne(d => d.ModuleCodeNavigation).WithMany()
                 .HasForeignKey(d => d.ModuleCode)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_tblUserModules_tblModule");
 
-            entity.HasOne(d => d.User).WithMany(p => p.TblUserModules)
+            entity.HasOne(d => d.User).WithMany()
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_tblUserModules_tblUser");
