@@ -49,12 +49,12 @@ namespace AttendanceAPI.Controllers
                 {
                     if (staffLecture == null)
                     {
-                        return "Failure";
+                        return "Staff lecture not found";
                     }
 
                     if (attendance.Date != staffLecture.Date)
                     {
-                        return "Failure";
+                        return "Staff lecture date does not match the current date";
                     }
 
                     context.TblStudentLectures.Add(new TblStudentLecture()
