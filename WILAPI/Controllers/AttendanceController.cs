@@ -24,7 +24,7 @@ namespace AttendanceAPI.Controllers
         {
             Attendance attendance = new Attendance(request);
 
-            var lecture = context.TblStudentLectures.Where(x => x.LectureId == attendance.lectureID).FirstOrDefault();
+            var lecture = context.TblStudentLectures.Where(x => x.LectureId == attendance.lectureID && x.UserId == attendance.UserID).FirstOrDefault();
             var modules = context.TblUserModules.Select(x => x.ModuleCode).ToList();
 
             if (!modules.Contains(attendance.moduleCode))
