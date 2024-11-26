@@ -24,7 +24,8 @@ namespace AttendanceAPI.Controllers
         {
             Attendance attendance = new Attendance(request);
 
-            var lecture = context.TblStudentLectures.Where(x => x.LectureId == attendance.lectureID && x.UserId == attendance.UserID).FirstOrDefault();
+            var currentLecture = context.TblStudentLectures.Where(x => x.LectureId == attendance.lectureID && x.UserId == attendance.UserID).FirstOrDefault();
+            var staffLecture = context.TblStaffLectures.Where(x => x.LectureId == attendance.lectureID).FirstOrDefault();
             var modules = context.TblUserModules.Select(x => x.ModuleCode).ToList();
 
             if (!modules.Contains(attendance.moduleCode))
@@ -36,16 +37,26 @@ namespace AttendanceAPI.Controllers
                 });
             }
 
-            if (lecture != null)//Check if lecture is already in DB
+            if (currentLecture != null)//Check if currentLecture is already in DB
             {
-                lecture.ScanOut = attendance.Time;//Update scan out time
+                currentLecture.ScanOut = attendance.Time;//Update scan out time
                 context.SaveChanges();
                 
                 return "Success";
-            } else //If there is no preexisting lecture in DB add a new one
+            } else //If there is no preexisting currentLecture in DB add a new one
             {
                 if (!attendance.classroomCode.IsNullOrEmpty() && !attendance.UserID.IsNullOrEmpty() && !attendance.moduleCode.IsNullOrEmpty())
                 {
+                    if (staffLecture == null)
+                    {
+                        return "Failure";
+                    }
+
+                    if (attendance.Date != staffLecture.Date)
+                    {
+                        return "Failure";
+                    }
+
                     context.TblStudentLectures.Add(new TblStudentLecture()
                     {
                         LectureId = attendance.lectureID,
