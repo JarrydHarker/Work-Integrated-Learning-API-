@@ -175,10 +175,10 @@ namespace AttendanceAPI.Controllers
                 {
                     if (dbLecture.Start != null)
                     {
-                        dbLecture.ClassroomCode = classroomCode;
                         dbLecture.Finish = TimeOnly.FromDateTime(DateTime.Now);
                     }else
                     {
+                        dbLecture.ClassroomCode = classroomCode;
                         dbLecture.Start = TimeOnly.FromDateTime(DateTime.Now);
                     }
 
