@@ -33,7 +33,7 @@ public partial class WilDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=tcp:wilapidbserver.database.windows.net,1433;Database=WIL-DB;User ID=ST10085210;Password=Treepair521;Encrypt=True;");
+        => optionsBuilder.UseSqlServer("Connection String");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
